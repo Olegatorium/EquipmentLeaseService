@@ -8,8 +8,8 @@ namespace EquipmentLeaseService.Core.Mappings
     {
         public AutoMapperProfile() 
         {
-            CreateMap<EquipmentPlacementContract, PlacementContractAddRequestDto>().ReverseMap();
-            CreateMap<EquipmentPlacementContract, PlacementContractResponseDto>().ReverseMap();
+            CreateMap<EquipmentPlacementContract, ContractAddRequestDto>().ReverseMap();
+            CreateMap<EquipmentPlacementContract, ContractResponseDto>().ReverseMap();
         }
     }
 }

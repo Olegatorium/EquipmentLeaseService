@@ -1,4 +1,8 @@
+using EquipmentLeaseService.Core.Domain.RepositoryContracts;
 using EquipmentLeaseService.Core.Mappings;
+using EquipmentLeaseService.Core.ServiceContracts;
+using EquipmentLeaseService.Core.Services;
+using EquipmentLeaseService.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +14,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+builder.Services.AddScoped<IContractService, ContractService>();
+builder.Services.AddScoped<IContractRepository, ContractRepository>();
 
 
 builder.Services.AddControllers();
