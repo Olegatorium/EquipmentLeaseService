@@ -13,6 +13,8 @@ namespace EquipmentLeaseService.Core.Domain.Entities
         [Key]
         public Guid ContractId { get; set; }
         public int EquipmentQuantity { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime ContractDate { get; set; }
 
         [ForeignKey("ProductionFacility")]

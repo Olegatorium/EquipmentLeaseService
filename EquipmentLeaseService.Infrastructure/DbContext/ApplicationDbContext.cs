@@ -16,6 +16,10 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<EquipmentPlacementContract>()
+           .Property(e => e.ContractDate)
+           .HasDefaultValueSql("GETUTCDATE()");
+
+        modelBuilder.Entity<EquipmentPlacementContract>()
             .HasOne(e => e.ProductionFacility)
             .WithMany(p => p.EquipmentPlacementContracts)
             .HasForeignKey(e => e.ProductionFacilityCode)

@@ -1,9 +1,6 @@
-﻿using EquipmentLeaseService.Core.Domain.RepositoryContracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EquipmentLeaseService.Core.Domain.Entities;
+using EquipmentLeaseService.Core.Domain.RepositoryContracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentLeaseService.Infrastructure.Repositories
 {
@@ -14,6 +11,56 @@ namespace EquipmentLeaseService.Infrastructure.Repositories
         public ContractRepository(ApplicationDbContext db)
         {
             _db = db;
+        }
+
+        public async Task CreateContract(EquipmentPlacementContract contract)
+        {
+            await _db.EquipmentPlacementContracts.AddAsync(contract);   
+
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<List<EquipmentPlacementContract>> GetAllContracts()
+        {
+            return await _db.EquipmentPlacementContracts.ToListAsync();
+        }
+
+        public async Task<EquipmentPlacementContract?> GetContract(Guid contractId)
+        {
+            return await _db.EquipmentPlacementContracts.FirstOrDefaultAsync(x=>x.ContractId == contractId);
+        }
+
+        public async Task<EquipmentPlacementContract?> GetFullContract(Guid contractId)
+        {
+            return await _db.EquipmentPlacementContracts
+                .Include(x => x.ProductionFacility)
+                .Include(x => x.ProcessEquipmentType)
+                .FirstOrDefaultAsync(x => x.ContractId == contractId);
+        }
+
+        public async Task<ProcessEquipmentType?> GetProcessEquipmentType(Guid processEquipmentTypeCode)
+        {
+            return await _db.ProcessEquipmentTypes.FirstOrDefaultAsync(x=>x.Code == processEquipmentTypeCode);
+        }
+
+        public async Task<bool> UpdateFacilityArea(Guid productionFacilityCode, decimal? takenArea)
+        {
+            ProductionFacility? productionFacility = await _db.ProductionFacilities
+                .FirstOrDefaultAsync(x => x.Code == productionFacilityCode);
+
+            if (productionFacility == null) 
+                return false;
+
+            decimal? remainingArea = productionFacility.StandardAreaForEquipment - takenArea;
+
+            if (remainingArea < 0)
+                return false;
+
+            productionFacility.StandardAreaForEquipment = remainingArea ?? 0;
+
+            await _db.SaveChangesAsync();
+
+            return true;
         }
     }
 }
