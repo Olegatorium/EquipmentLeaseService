@@ -19,12 +19,18 @@ namespace EquipmentLeaseService.API.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        [ProducesResponseType(201, Type = typeof(ContractResponseDto))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ContractResponseDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ContractResponseDto>> CreateContract([FromBody] ContractAddRequestDto contractAddRequest)
         {
             if (contractAddRequest == null)
             {
                 return BadRequest("Request data is missing.");
+            }
+            else if(contractAddRequest.EquipmentQuantity <= 0)
+            {
+                return BadRequest("Equipment Quantity can`t be less or equal to 0");
             }
 
             decimal? occupiedEquipmentArea = await _contractService.GetOccupiedEquipmentArea(contractAddRequest.ProcessEquipmentTypeCode);
@@ -50,6 +56,8 @@ namespace EquipmentLeaseService.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("[action]/{contractId}")]
         public async Task<ActionResult<ContractResponseDto>> GetContract([FromRoute] Guid contractId) 
         {
@@ -64,6 +72,8 @@ namespace EquipmentLeaseService.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Route("[action]/{contractId}")]
         public async Task<ActionResult<ContractFullResponseDto>> GetFullContract([FromRoute] Guid contractId)
         {
@@ -79,9 +89,11 @@ namespace EquipmentLeaseService.API.Controllers
 
         [HttpGet]
         [Route("[action]")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<ContractResponseDto>>> GetAllContracts() 
         {
-            List<ContractResponseDto>? contractResponses = await _contractService.GetAllContracts();
+            List<ContractResponseDto> contractResponses = await _contractService.GetAllContracts();
 
             if(contractResponses.Count == 0)
             {

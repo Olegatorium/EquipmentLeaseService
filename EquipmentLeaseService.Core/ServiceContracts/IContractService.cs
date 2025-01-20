@@ -1,4 +1,5 @@
 ﻿using EquipmentLeaseService.Core.DTO.Contract;
+using EquipmentLeaseService.Core.DTO.ContractUpdateRequest;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -32,7 +32,9 @@ namespace EquipmentLeaseService.Core.Services
         {
             decimal? takenArea = equipmentQuantity * occupiedEquipmentArea;
 
-            return await _contractRepository.UpdateFacilityArea(productionFacilityCode, takenArea);
+            bool isUpdated = await _contractRepository.UpdateFacilityArea(productionFacilityCode, takenArea);
+
+            return isUpdated;
         }
 
         public async Task<decimal?> GetOccupiedEquipmentArea(Guid equipmentTypeCode)

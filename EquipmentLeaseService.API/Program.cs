@@ -17,6 +17,8 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddScoped<IContractService, ContractService>();
 builder.Services.AddScoped<IContractRepository, ContractRepository>();
+builder.Services.AddScoped<IContractRequestsService, ContractRequestsService>();
+builder.Services.AddScoped<IContractRequestsRepository, ContractRequestsRepository>();
 
 
 builder.Services.AddControllers();

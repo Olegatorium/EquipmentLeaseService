@@ -6,6 +6,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<ProductionFacility> ProductionFacilities { get; set; }
     public DbSet<ProcessEquipmentType> ProcessEquipmentTypes { get; set; }
     public DbSet<EquipmentPlacementContract> EquipmentPlacementContracts { get; set; }
+    public DbSet<ContractUpdateRequest> ContractUpdateRequests { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -15,21 +16,30 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        // Fluent API:
+
         modelBuilder.Entity<EquipmentPlacementContract>()
            .Property(e => e.ContractDate)
            .HasDefaultValueSql("GETUTCDATE()");
+
+        modelBuilder.Entity<ContractUpdateRequest>()
+            .HasOne(e => e.EquipmentPlacementContract)
+            .WithMany()
+            .HasForeignKey(e => e.ContractId)
+            .OnDelete(DeleteBehavior.Cascade);
+
 
         modelBuilder.Entity<EquipmentPlacementContract>()
             .HasOne(e => e.ProductionFacility)
             .WithMany(p => p.EquipmentPlacementContracts)
             .HasForeignKey(e => e.ProductionFacilityCode)
-            .OnDelete(DeleteBehavior.Restrict);  // Можно задать тип каскадного удаления
+            .OnDelete(DeleteBehavior.Restrict);  
 
         modelBuilder.Entity<EquipmentPlacementContract>()
             .HasOne(e => e.ProcessEquipmentType)
             .WithMany(p => p.EquipmentPlacementContracts)
             .HasForeignKey(e => e.ProcessEquipmentTypeCode)
-            .OnDelete(DeleteBehavior.Restrict);  // Можно задать тип каскадного удаления
+            .OnDelete(DeleteBehavior.Restrict);  
 
 
         // seedind data for ProductionFacility and ProcessEquipmentType:

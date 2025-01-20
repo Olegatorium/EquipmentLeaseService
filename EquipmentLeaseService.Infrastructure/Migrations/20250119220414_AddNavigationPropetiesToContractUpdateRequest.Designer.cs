@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EquipmentLeaseService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250119220414_AddNavigationPropetiesToContractUpdateRequest")]
+    partial class AddNavigationPropetiesToContractUpdateRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,9 @@ namespace EquipmentLeaseService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContractId");
+                    b.HasIndex("ProcessEquipmentTypeCode");
+
+                    b.HasIndex("ProductionFacilityCode");
 
                     b.ToTable("ContractUpdateRequests");
                 });
@@ -95,25 +100,25 @@ namespace EquipmentLeaseService.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Code = new Guid("be36a363-a19f-492b-83f1-9b18e97539fb"),
+                            Code = new Guid("81e4203a-3e2a-4d85-bf17-dd62be88948c"),
                             Area = 120m,
                             Name = "CNC Machine"
                         },
                         new
                         {
-                            Code = new Guid("9676ac5e-c7a4-403c-8186-c91422c2cf50"),
+                            Code = new Guid("bc54fc1b-ff98-4ac0-b487-b0e34ee911d4"),
                             Area = 80m,
                             Name = "Welding Robot"
                         },
                         new
                         {
-                            Code = new Guid("b17f62bf-6073-4df6-862a-65a35bbc81a8"),
+                            Code = new Guid("364fdf70-d9cd-4125-866e-8e2906828725"),
                             Area = 150m,
                             Name = "Conveyor Belt"
                         },
                         new
                         {
-                            Code = new Guid("352c67e3-5943-42b3-a112-fad57e9f8c0a"),
+                            Code = new Guid("2d84919b-6f8b-45ad-85bb-a9e8ac768f69"),
                             Area = 100m,
                             Name = "Packaging Machine"
                         });
@@ -139,19 +144,19 @@ namespace EquipmentLeaseService.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Code = new Guid("f10dd7d5-df00-4d0b-a528-e6b477273b21"),
+                            Code = new Guid("d429719b-2f25-4fe3-a682-5255760a2c38"),
                             Name = "Factory A - Main Building",
                             StandardAreaForEquipment = 1500m
                         },
                         new
                         {
-                            Code = new Guid("f5f80771-ab3a-482d-89af-3ee616215539"),
+                            Code = new Guid("7f3592f1-5ab8-436f-b85d-1f7f7ff46d69"),
                             Name = "Factory B - Assembly Line",
                             StandardAreaForEquipment = 2500m
                         },
                         new
                         {
-                            Code = new Guid("4e0d3341-5af4-4054-91f2-9cf16a719134"),
+                            Code = new Guid("9841f87c-52d0-4a32-847d-472df95d4c22"),
                             Name = "Factory C - Packaging Area",
                             StandardAreaForEquipment = 1800m
                         });
@@ -159,13 +164,21 @@ namespace EquipmentLeaseService.Infrastructure.Migrations
 
             modelBuilder.Entity("EquipmentLeaseService.Core.Domain.Entities.ContractUpdateRequest", b =>
                 {
-                    b.HasOne("EquipmentLeaseService.Core.Domain.Entities.EquipmentPlacementContract", "EquipmentPlacementContract")
+                    b.HasOne("EquipmentLeaseService.Core.Domain.Entities.ProcessEquipmentType", "ProcessEquipmentType")
                         .WithMany()
-                        .HasForeignKey("ContractId")
+                        .HasForeignKey("ProcessEquipmentTypeCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("EquipmentPlacementContract");
+                    b.HasOne("EquipmentLeaseService.Core.Domain.Entities.ProductionFacility", "ProductionFacility")
+                        .WithMany()
+                        .HasForeignKey("ProductionFacilityCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProcessEquipmentType");
+
+                    b.Navigation("ProductionFacility");
                 });
 
             modelBuilder.Entity("EquipmentLeaseService.Core.Domain.Entities.EquipmentPlacementContract", b =>
