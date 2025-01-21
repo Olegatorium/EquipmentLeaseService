@@ -1,4 +1,5 @@
 ﻿using EquipmentLeaseService.Core.Domain.Entities;
+using EquipmentLeaseService.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,6 @@ namespace EquipmentLeaseService.Core.Domain.RepositoryContracts
         Task<EquipmentPlacementContract?> GetContract(Guid contractId);
         Task<EquipmentPlacementContract?> GetFullContract(Guid contractId);
         Task<ProcessEquipmentType?> GetProcessEquipmentType(Guid processEquipmentTypeCode);
-        Task<bool> UpdateFacilityArea(Guid productionFacilityCode, decimal? takenArea);
+        Task<CreateContractResultStatus> UpdateFacilityArea(Guid productionFacilityCode, decimal? takenArea);
     }
 }

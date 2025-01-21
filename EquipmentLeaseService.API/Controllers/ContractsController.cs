@@ -1,4 +1,5 @@
 ﻿using EquipmentLeaseService.Core.DTO.Contract;
+using EquipmentLeaseService.Core.Enums;
 using EquipmentLeaseService.Core.ServiceContracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,36 +25,20 @@ namespace EquipmentLeaseService.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ContractResponseDto>> CreateContract([FromBody] ContractAddRequestDto contractAddRequest)
         {
-            if (contractAddRequest == null)
+            var result = await _contractService.CreateContractWithValidation(contractAddRequest);
+
+            return result.Status switch
             {
-                return BadRequest("Request data is missing.");
-            }
-            else if(contractAddRequest.EquipmentQuantity <= 0)
-            {
-                return BadRequest("Equipment Quantity can`t be less or equal to 0");
-            }
-
-            decimal? occupiedEquipmentArea = await _contractService.GetOccupiedEquipmentArea(contractAddRequest.ProcessEquipmentTypeCode);
-
-            if (occupiedEquipmentArea == null) 
-            {
-                return NotFound($"Process Equipment Type with code {contractAddRequest.ProcessEquipmentTypeCode} not found.");
-            }
-
-            bool IsFacilityAreaUpdated = await _contractService.UpdateFacilityArea(
-                contractAddRequest.ProductionFacilityCode,
-                contractAddRequest.EquipmentQuantity,
-                occupiedEquipmentArea);
-
-            if (!IsFacilityAreaUpdated)
-            {
-                return BadRequest("Not enough space available to place the Process Equipment Type in the specified Production Facility.");
-            }
-
-            ContractResponseDto contractResponse = await _contractService.CreateContract(contractAddRequest);
-
-            return CreatedAtAction(nameof(GetContract), new { contractId = contractResponse.ContractId }, contractResponse);
+                CreateContractResultStatus.Success => CreatedAtAction(nameof(GetContract), new { contractId = result.Contract!.ContractId }, result.Contract),
+                CreateContractResultStatus.InvalidRequest => BadRequest(result.ErrorMessage),
+                CreateContractResultStatus.InvalidEquipmentQuantity => BadRequest(result.ErrorMessage),
+                CreateContractResultStatus.EquipmentTypeNotFound => NotFound(result.ErrorMessage),
+                CreateContractResultStatus.ProductionFacilityNotFound => NotFound(result.ErrorMessage),
+                CreateContractResultStatus.InsufficientSpace => BadRequest(result.ErrorMessage),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, "An unknown error occurred.")
+            };
         }
+
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]

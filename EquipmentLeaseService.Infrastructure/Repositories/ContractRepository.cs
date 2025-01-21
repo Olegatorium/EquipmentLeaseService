@@ -1,5 +1,6 @@
 ﻿using EquipmentLeaseService.Core.Domain.Entities;
 using EquipmentLeaseService.Core.Domain.RepositoryContracts;
+using EquipmentLeaseService.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EquipmentLeaseService.Infrastructure.Repositories
@@ -43,24 +44,24 @@ namespace EquipmentLeaseService.Infrastructure.Repositories
             return await _db.ProcessEquipmentTypes.FirstOrDefaultAsync(x=>x.Code == processEquipmentTypeCode);
         }
 
-        public async Task<bool> UpdateFacilityArea(Guid productionFacilityCode, decimal? takenArea)
+        public async Task<CreateContractResultStatus> UpdateFacilityArea(Guid productionFacilityCode, decimal? takenArea)
         {
             ProductionFacility? productionFacility = await _db.ProductionFacilities
                 .FirstOrDefaultAsync(x => x.Code == productionFacilityCode);
 
             if (productionFacility == null) 
-                return false;
+                return CreateContractResultStatus.ProductionFacilityNotFound;
 
             decimal? remainingArea = productionFacility.StandardAreaForEquipment - takenArea;
 
             if (remainingArea < 0)
-                return false;
+                return CreateContractResultStatus.InsufficientSpace;
 
             productionFacility.StandardAreaForEquipment = remainingArea ?? 0;
 
             await _db.SaveChangesAsync();
 
-            return true;
+            return CreateContractResultStatus.Success;
         }
     }
 }
