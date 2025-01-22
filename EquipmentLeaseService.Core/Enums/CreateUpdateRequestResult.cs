@@ -12,7 +12,6 @@ namespace EquipmentLeaseService.Core.Enums
         ContractNotFound,
         EquipmentNotFound,
         FacilityNotFound,
-        InvalidQuantity,
-        UnknownError
+        InvalidQuantity
     }
 }

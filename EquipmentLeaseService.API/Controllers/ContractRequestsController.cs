@@ -24,6 +24,7 @@ namespace EquipmentLeaseService.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateUpdateRequest([FromBody] ContractUpdateRequestDto contractUpdateRequest)
         {
             if (contractUpdateRequest == null)
@@ -40,7 +41,7 @@ namespace EquipmentLeaseService.API.Controllers
                 CreateUpdateRequestResult.ContractNotFound => BadRequest("Contract with provided ID does not exist"),
                 CreateUpdateRequestResult.EquipmentNotFound => BadRequest("Process equipment type with provided code does not exist"),
                 CreateUpdateRequestResult.FacilityNotFound => BadRequest("Production facility with provided code does not exist"),
-                _ => BadRequest("An unknown error occurred")
+                _ => StatusCode(StatusCodes.Status500InternalServerError, "An unknown error occurred.")
             };
         }
 

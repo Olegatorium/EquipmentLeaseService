@@ -23,6 +23,7 @@ namespace EquipmentLeaseService.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ContractResponseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ContractResponseDto>> CreateContract([FromBody] ContractAddRequestDto contractAddRequest)
         {
             var result = await _contractService.CreateContractWithValidation(contractAddRequest);
