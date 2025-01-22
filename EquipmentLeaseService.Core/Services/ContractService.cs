@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using EquipmentLeaseService.Core.BackgroundProcessingContract;
 using EquipmentLeaseService.Core.Domain.Entities;
 using EquipmentLeaseService.Core.Domain.RepositoryContracts;
 using EquipmentLeaseService.Core.DTO.Contract;
 using EquipmentLeaseService.Core.Enums;
 using EquipmentLeaseService.Core.ServiceContracts;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 
 namespace EquipmentLeaseService.Core.Services
@@ -12,12 +14,18 @@ namespace EquipmentLeaseService.Core.Services
     {
         private readonly IContractRepository _contractRepository;
         private readonly IMapper _mapper;
+        private readonly IBackgroundTaskQueue _taskQueue;
+        private readonly ILogger<ContractService> _logger;
 
-        public ContractService(IContractRepository contractRepository, IMapper mapper)
+        public ContractService(IContractRepository contractRepository, IMapper mapper, 
+            IBackgroundTaskQueue backgroundTaskQueue, ILogger<ContractService> logger)
         {
             _contractRepository = contractRepository;
             _mapper = mapper;
+            _taskQueue = backgroundTaskQueue;
+            _logger = logger;
         }
+
 
         public async Task<ContractResponseDto> CreateContract(ContractAddRequestDto contractAddRequest)
         {
@@ -83,6 +91,13 @@ namespace EquipmentLeaseService.Core.Services
             }
 
             ContractResponseDto contractResponse = await CreateContract(contractAddRequest);
+
+            //Background Task:
+            _taskQueue.QueueBackgroundWorkItem(async token =>
+            {
+                 await Task.Delay(3000, token); // Simulate some processing
+                _logger.LogInformation($"Background processing for contract {contractResponse.ContractId} completed.");
+            });
 
             return new CreateContractResultDto
             {
