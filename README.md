@@ -45,6 +45,7 @@ The API access key is provided in the `secrets.pdf`.
 ## 3. Setup Local Instructions
 
 1. clone this repository - git clone
+      ```
    In the `AppSettings.json` file, insert the API access key and the connection string to the database:
    - Connection string:
      ```
