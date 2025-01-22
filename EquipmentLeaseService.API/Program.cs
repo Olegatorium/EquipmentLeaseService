@@ -21,9 +21,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddScoped<IContractService, ContractService>();
-builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<IContractRequestsService, ContractRequestsService>();
+builder.Services.AddScoped<IEquipmentService, EquipmentService>();
+builder.Services.AddScoped<IProductionFacilityService, ProductionFacilityService>();
+
+
+builder.Services.AddScoped<IContractRepository, ContractRepository>();
 builder.Services.AddScoped<IContractRequestsRepository, ContractRequestsRepository>();
+builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+builder.Services.AddScoped<IProductionFacilityRepository, ProductionFacilityRepository>();
+
 
 builder.Services.AddSingleton<IApiKeyService, ApiKeyService>();
 
