@@ -16,5 +16,6 @@ namespace EquipmentLeaseService.Core.Domain.RepositoryContracts
         Task<EquipmentPlacementContract?> GetFullContract(Guid contractId);
         Task<ProcessEquipmentType?> GetProcessEquipmentType(Guid processEquipmentTypeCode);
         Task<CreateContractResultStatus> UpdateFacilityArea(Guid productionFacilityCode, decimal? takenArea);
+        Task<bool> DeleteContract(Guid id);
     }
 }

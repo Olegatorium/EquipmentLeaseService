@@ -146,5 +146,11 @@ namespace EquipmentLeaseService.Core.Services
 
             return _mapper.Map<List<ContractResponseDto>>(contracts);
         }
+        public async Task<bool> DeleteContract(Guid id)
+        {
+            bool isDeleted = await _contractRepository.DeleteContract(id);
+
+            return isDeleted;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using EquipmentLeaseService.Core.DTO.Contract;
 using EquipmentLeaseService.Core.Enums;
 using EquipmentLeaseService.Core.ServiceContracts;
+using EquipmentLeaseService.Core.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -87,6 +88,22 @@ namespace EquipmentLeaseService.API.Controllers
             }
 
             return Ok(contractResponses);
+        }
+
+        [HttpDelete]
+        [Route("[action]/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteUpdateRequest([FromRoute] Guid id)
+        {
+            bool isDeleted = await _contractService.DeleteContract(id);
+
+            if (!isDeleted)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
     }

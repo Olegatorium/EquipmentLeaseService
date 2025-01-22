@@ -18,5 +18,6 @@ namespace EquipmentLeaseService.Core.ServiceContracts
         Task<List<ContractResponseDto>> GetAllContracts();
         Task<CreateContractResultStatus> UpdateFacilityArea(Guid productionFacilityCode, int equipmentQuantity, decimal? occupiedEquipmentArea); 
         Task<decimal?> GetOccupiedEquipmentArea(Guid processEquipmentTypeCode);
+        Task<bool> DeleteContract(Guid id);
     }
 }

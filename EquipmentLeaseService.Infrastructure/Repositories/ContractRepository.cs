@@ -63,5 +63,16 @@ namespace EquipmentLeaseService.Infrastructure.Repositories
 
             return CreateContractResultStatus.Success;
         }
+        public async Task<bool> DeleteContract(Guid id)
+        {
+            EquipmentPlacementContract? contract = await _db.EquipmentPlacementContracts.FindAsync(id);
+            if (contract == null) return false;
+
+            _db.EquipmentPlacementContracts.Remove(contract);
+
+            await _db.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
