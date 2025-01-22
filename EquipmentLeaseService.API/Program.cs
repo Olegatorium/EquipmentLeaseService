@@ -35,7 +35,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 var logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.File("Logs/NzTrails_Log.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.File("Logs/EquipmentLeaseService_Log.txt", rollingInterval: RollingInterval.Day)
     .MinimumLevel.Information()
     .CreateLogger();
 
@@ -80,6 +80,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ApiKeyMiddleware>();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
 
 app.UseHttpsRedirection();
 
