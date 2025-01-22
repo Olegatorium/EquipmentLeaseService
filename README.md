@@ -44,15 +44,15 @@ The API access key is provided in the `secrets.pdf`.
 
 ## 3. Setup Local Instructions
 
-1. clone this repository - git clone
-      ```
-   In the `AppSettings.json` file, insert the API access key and the connection string to the database:
+1. Clone this repository using `git clone`.
+2. Open the project in Visual Studio.
+3. Find the `AppSettings.json` file and insert the API access key and the connection string to the database:
    - Connection string:
      ```
      Server=(localdb)\\MSSQLLocalDB;Database=EquipmentPlacementDB;Trusted_Connection=True;TrustServerCertificate=True
      ```
+4. Go to the **Package Manager Console**, select the **Infrastructure** project, and run the following command:
 
-3. Go to the **Package Manager Console**, select the **Infrastructure** project, and run the following command:
 Update-Database
 Now the project is set up locally and can be tested.
 
