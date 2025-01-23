@@ -80,6 +80,8 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+await DatabaseWarmUp.WarmUpDatabaseAsync(connectionString);
 
 app.UseSwagger();
 app.UseSwaggerUI();

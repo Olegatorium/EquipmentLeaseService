@@ -33,7 +33,7 @@ namespace EquipmentLeaseService.API.Middleware
                 var error = new
                 {
                     Id = errorId,
-                    ErrorMessage = "Something went wrong! We are looking for resolve"
+                    ErrorMessage = "The database is not fully initialized yet, but it will be up and running shortly."
                 };
 
                 await httpContext.Response.WriteAsJsonAsync(error);
