@@ -1,6 +1,9 @@
 ## 1. Summary
 
-I have completed all the sub-tasks of the assignment and added my own ideas.
+The customer owns a large number of production facilities and plans to lease out
+the areas of these facilities for hosting process equipment. In this context, there is a
+need for a service that would allow administering contracts for the placement of
+equipment on premises.
 
 ### Project:
 - Implemented access protection for API methods using a randomly generated encryption key.
@@ -40,7 +43,7 @@ The Web API is deployed and can be accessed via the following link:
 
 [Web API Swagger UI](https://equipmentleaseservice-e5gfhtfwachrgcgz.northeurope-01.azurewebsites.net/swagger/index.html)
 
-The API access key is provided in the `secrets.pdf`.
+The API access key: lhyliWU3NEWpIzY8KqZspWZlwPVC26CxrLF9yaDYfMs=
 
 ## 3. Setup Local Instructions
 
